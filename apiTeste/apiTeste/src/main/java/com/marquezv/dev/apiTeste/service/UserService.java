@@ -37,10 +37,16 @@ public class UserService {
 		return repository.save(mapper.map(userDTO, User.class));
 	}
 	
+	public User update(UserDTO userDTO) {
+		findByEmail(userDTO);
+		return repository.save(mapper.map(userDTO, User.class));
+	}
+	
 	private void findByEmail(UserDTO userDTO) {
 		Optional<User> user = repository.findByEmail(userDTO.getEmail());
-		if(user.isPresent()) {
+		if(user.isPresent() && !user.get().getId().equals(userDTO.getId())) {
 			throw new DataIntegratyViolationException("E-mail em utilizacao");
 		}
 	}
+	
 }
