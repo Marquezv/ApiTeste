@@ -42,6 +42,11 @@ public class UserService {
 		return repository.save(mapper.map(userDTO, User.class));
 	}
 	
+	public void delete(Long id) {
+		findById(id);
+		repository.deleteById(id);
+	}
+	
 	private void findByEmail(UserDTO userDTO) {
 		Optional<User> user = repository.findByEmail(userDTO.getEmail());
 		if(user.isPresent() && !user.get().getId().equals(userDTO.getId())) {
