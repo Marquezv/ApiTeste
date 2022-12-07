@@ -1,5 +1,7 @@
 package com.marquezv.dev.apiTeste.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +13,15 @@ import com.marquezv.dev.apiTeste.repository.UserRepository;
 public class UserService {
 	
 	@Autowired
-	private UserRepository userRespository;
+	private UserRepository repository;
 	
 	public User findById(Long id) {
-		return userRespository.findById(id)
+		return repository.findById(id)
 				.orElseThrow(
 						() -> new ObjectNotFoundException("Objeto nao encontrado"));
 	}
-	
+
+	public List<User> findAll() {
+		return repository.findAll();
+	}
 }

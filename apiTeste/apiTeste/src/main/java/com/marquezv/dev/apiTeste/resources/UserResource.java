@@ -1,5 +1,8 @@
 package com.marquezv.dev.apiTeste.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +25,17 @@ public class UserResource {
 	UserService userService;
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> findById(@PathVariable Long id) throws Exception {
+	public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
 		return ResponseEntity.ok().body(mapper.map(userService.findById(id), UserDTO.class));
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<UserDTO>>findAll(){
+		return ResponseEntity.ok().body(
+				userService.findAll().stream()
+					.map(user -> mapper.map(user, UserDTO.class))
+					.collect(Collectors.toList())
+				);
 	}
 	
 }
