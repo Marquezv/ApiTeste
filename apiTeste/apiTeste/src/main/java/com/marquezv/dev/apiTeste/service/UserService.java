@@ -1,6 +1,7 @@
 package com.marquezv.dev.apiTeste.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.marquezv.dev.apiTeste.domain.User;
 import com.marquezv.dev.apiTeste.domain.dto.UserDTO;
+import com.marquezv.dev.apiTeste.exceptions.DataIntegratyViolationException;
 import com.marquezv.dev.apiTeste.exceptions.ObjectNotFoundException;
 import com.marquezv.dev.apiTeste.repository.UserRepository;
 
@@ -30,7 +32,15 @@ public class UserService {
 		return repository.findAll();
 	}
 	
-	public User create(UserDTO user) {
-		return repository.save(mapper.map(user, User.class));
+	public User create(UserDTO userDTO) {
+		findByEmail(userDTO);
+		return repository.save(mapper.map(userDTO, User.class));
+	}
+	
+	private void findByEmail(UserDTO userDTO) {
+		Optional<User> user = repository.findByEmail(userDTO.getEmail());
+		if(user.isPresent()) {
+			throw new DataIntegratyViolationException("E-mail em utilizacao");
+		}
 	}
 }
