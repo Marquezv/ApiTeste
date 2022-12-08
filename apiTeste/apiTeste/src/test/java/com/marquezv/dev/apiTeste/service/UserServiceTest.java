@@ -1,10 +1,10 @@
 package com.marquezv.dev.apiTeste.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.marquezv.dev.apiTeste.domain.User;
 import com.marquezv.dev.apiTeste.domain.dto.UserDTO;
+import com.marquezv.dev.apiTeste.exceptions.ObjectNtFoundException;
 import com.marquezv.dev.apiTeste.repository.UserRepository;
 
 @SpringBootTest
@@ -61,6 +62,19 @@ public class UserServiceTest {
 		assertEquals(ID, res.getId());
 		assertEquals(USERNAME, res.getUsername());
 		assertEquals(EMAIL, res.getEmail());
+	}
+	
+	@Test
+	void whenFindByIdThenReturnAnObjectNotFoundException() {
+		Mockito.when(repository.findById(Mockito.anyLong())).thenThrow(new ObjectNtFoundException("Objeto não encontrado"));
+		
+		try {
+			userService.findById(ID);
+		} catch (Exception err) {
+			assertEquals(ObjectNtFoundException.class, err.getClass());
+			assertEquals("Objeto não encontrado", err.getMessage());
+		}
+		
 	}
 	
 	@Test

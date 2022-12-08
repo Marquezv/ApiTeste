@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.marquezv.dev.apiTeste.domain.User;
 import com.marquezv.dev.apiTeste.domain.dto.UserDTO;
 import com.marquezv.dev.apiTeste.exceptions.DataIntegratyViolationException;
-import com.marquezv.dev.apiTeste.exceptions.ObjectNotFoundException;
+import com.marquezv.dev.apiTeste.exceptions.ObjectNtFoundException;
 import com.marquezv.dev.apiTeste.repository.UserRepository;
 
 @Service
@@ -25,7 +25,7 @@ public class UserService {
 	public User findById(Long id) {
 		return repository.findById(id)
 				.orElseThrow(
-						() -> new ObjectNotFoundException("Objeto nao encontrado"));
+						() -> new ObjectNtFoundException("Objeto nao encontrado"));
 	}
 
 	public List<User> findAll() {
